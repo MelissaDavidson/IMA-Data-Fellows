@@ -1,0 +1,65 @@
+---
+title: "01_LibraryBookUse"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Purpose: To explore some of the records of books from Macalester College library
+
+# Basics
+The purpose of this mini-project is to explore some of the records of books from the Macalester College library. The data comes from tiny.cc and needs to be downloaded ONLY ONCE.
+```{r}
+download.file("http://tiny.cc/dcf/Library-small.rda", dest = "Library-small.rda")
+# only do once
+```
+
+Then load the information into R. It will create two data table objects, Inv and Bks. The library's collection is in Inv. The Bks data table is about individual books that might or might not be in the library's collection.
+```{r}
+load("Library-small.rda")
+```
+
+It is always a good idea to check that the downloaded data looks reasonable.
+```{r}
+head(Inv)
+str(Inv)
+head(Bks)
+str(Bks)
+```
+
+# Looking at the Data
+
+Create new chunks to calculate the number of cases in each file, the names of the variables, and whatever else might occur to you.
+
+1. How many books?
+```{r}
+cases_Inv = tally(Inv)
+# number of cases in inventory
+# can also do nrow(Inv)
+cases_Bks = tally(Bks)
+# number of cases in books
+# can also do nrow(Bks)
+```
+
+2. What are the variables?
+```{r}
+names(Inv)
+# names of variables in inventory
+names(Bks)
+# names of variables in books
+
+# Note: str(Inv) will give you the variable names and their types
+```
+
+3. How many books does each author have in the library?
+```{r}
+AuthorCount <-
+  Inv %>%
+  group_by(Author) %>%
+  summarise(count = n())
+# group by author name and then count MUST USE N TO COUNT b/c nrow is not a reduction verb
+```
+
+4. How many books are available (in some way) from each author?

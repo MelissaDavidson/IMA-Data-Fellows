@@ -1,0 +1,84 @@
+---
+title: "05_Births_as_a_class"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+library(DataComputing)
+data(Birthdays, package = "mosaicData")
+# to see exactly where data comes from
+library(lubridate)
+```
+
+```{r}
+DailyBirths <- 
+  Birthdays %>% 
+  group_by(date) %>%
+  summarise(total = sum(births))
+```
+
+```{r}
+# skipping to MyTwoYears, 4
+my_years = c(1980, 1981)
+My_interval <- 
+  DailyBirths %>% 
+  filter(year(date) %in% c(1980,1981))
+```
+
+```{r}
+# plot My_interval
+My_interval %>% 
+  mutate(dow = wday(date, label = TRUE)) %>% 
+  ggplot(aes(x = date, y = total)) +
+  geom_point(aes(color = dow), size = 0) +
+  geom_line(aes(color = dow))
+
+# OR
+# setting color in ggplot sets for all following
+# My_interval %>% 
+#   mutate(dow = wday(date, label = TRUE)) %>% 
+#   ggplot(aes(x = date, y = total, color = dow)) +
+#   geom_point(size = 0) +
+#   geom_line()
+```
+
+```{r}
+# read in Holiday data
+# {r cache} would store it so don't have to recompile
+Holidays <- 
+  read.csv("http://tiny.cc/dcf/US-Holidays.csv") %>% 
+  mutate(date = as.POSIXct(lubridate::dmy(date)))
+```
+
+```{r}
+HolidayDay <- 
+  Holidays %>% 
+  filter(year(date) %in% my_years) %>% 
+  mutate(dow = wday(date, label = TRUE)) 
+My_interval %>% 
+  mutate(dow = wday(date, label = TRUE)) %>% 
+  ggplot(aes(x = date, y = total)) +
+  geom_point(aes(color = dow), size = 0) +
+  geom_line(aes(color = dow)) +
+  geom_vline(data = HolidayDay, 
+             aes(xintercept = as.numeric(date), color = dow, alpha = .1, size = 3)) +
+  geom_text(data = HolidayDay, aes(x = date, y = 11000, label = holiday, color = "black", alpha = 0.1), 
+            angle = 80, size = 0)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

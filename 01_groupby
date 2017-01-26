@@ -1,0 +1,36 @@
+# Introduction 'group_by()' and 'summarise()'
+
+```{r include = FALSE}
+library(dplyr)
+library(ggplot2)
+library(mosaic)
+Galton # or data(Galton, package = "mosaicData")
+```
+
+```{r}
+TMP <-
+  Galton %>%
+  group_by(sex)
+nrow(Galton)
+nrow(TMP)
+names(Galton)
+names(TMP)
+head(Galton)
+head(TMP)
+```
+
+```{r}
+Galton %>%
+  summarise(mheight = mean(height),
+      m_mother = median(mother),
+      s_father = sd(father),
+      ncases = n())
+  # n() tells how many cases there are
+  # note: can do things like mean(height/sqrt(nkids)), which divides height by the square root of the number of kids
+```
+
+```{r}
+Galton %>%
+  group_by(sex, nkids) %>%
+  summarise(mheight = mean(height))
+```

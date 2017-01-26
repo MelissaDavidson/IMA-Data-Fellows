@@ -1,0 +1,23 @@
+---
+title: "Basics_ggplot"
+output: html_document
+---
+
+# Basics of ggplot
+
+```{r include}
+library(ggplot2)
+data(Galton, package = "mosaicData")
+```
+
+```{r}
+names(Galton)
+```
+
+```{r}
+Galton %>%
+  ggplot(aes(x = mother, y = height)) +
+  geom_point(aes(shape = sex, color = sex)) +
+  facet_grid(. ~ sex) +
+  geom_smooth()
+```
