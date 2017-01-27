@@ -7,6 +7,7 @@ output: html_document
 
 ```{r include}
 library(ggplot2)
+library(dplyr)
 data(Galton, package = "mosaicData")
 ```
 

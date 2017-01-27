@@ -1,0 +1,66 @@
+LOC_asc <- LOC[order(LOC$subject),]
+# sort alphabetically
+
+SecondVotes <-
+  Minneapolis2013 %>%
+  group_by(Second) %>%
+  tally() %>%
+  arrange(desc(n)) %>%
+  head(5)
+# show top 5 candidates in Second
+
+UndervoteCountFirst <-
+  Minneapolis2013 %>%
+  group_by(First) %>%
+  tally() %>%
+  filter(First == "undervote")
+  
+UndervoteCountSecond <-
+  Minneapolis2013 %>%
+  group_by(Second) %>%
+  tally() %>%
+  filter(Second == "undervote")
+  
+UndervoteCountThird <-
+  Minneapolis2013 %>%
+  group_by(Third) %>%
+  tally() %>%
+  filter(Third == "undervote")
+OR
+UndervoteCountThird <-
+  Minneapolis2013 %>%
+  filter(Third == "undervote") %>%
+  tally() %>%
+
+BETTER  
+UndervoteCountAll <-
+  Minneapolis2013 %>%
+  summarise(in_first = sum(First == "undervote"),
+            in_second = sum(Second == "undervote"),
+            in_third = sum(Third == "undervote"))
+  
+  
+BetsyHodges <-
+  Minneapolis2013 %>%
+  filter(First == "BETSY HODGES") %>%
+  group_by(Second) %>%
+  tally() %>%
+  arrange(desc(n)) %>%
+  head(3)
+# top 3 Second votes with Betsy Hodges as First
+
+PrecinctUndervote <-
+  Minneapolis2013 %>%
+  group_by(Precinct) %>%
+  summarise(frac = mean(First == "undervote")) %>%
+  arrange(desc(frac)) %>%
+  head(3)
+# Precinct with highest fraction of undervote as First
+OR
+PrecinctUndervote <-
+  Minneapolis2013 %>%
+  group_by(Precinct) %>%
+  summarise(uvotes = sum(First =="undervote"), total = n()) %>%
+  mutate(frac = uvotes / total) %>%
+  arrange(desc(frac)) %>%
+  head(3)

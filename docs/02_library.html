@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+
+
+<title>01_LibraryBookUse</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-1.1/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-1.1/highlight.js"></script>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs && document.readyState && document.readyState === "complete") {
+   window.setTimeout(function() {
+      hljs.initHighlighting();
+   }, 0);
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">My Website</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">01_LibraryBookUse</h1>
+
+</div>
+
+<div id="TOC">
+<ul>
+<li><a href="#purpose-to-explore-some-of-the-records-of-books-from-macalester-college-library">Purpose: To explore some of the records of books from Macalester College library</a></li>
+<li><a href="#basics">Basics</a></li>
+<li><a href="#looking-at-the-data">Looking at the Data</a></li>
+</ul>
+</div>
+
+<div id="purpose-to-explore-some-of-the-records-of-books-from-macalester-college-library" class="section level2">
+<h2>Purpose: To explore some of the records of books from Macalester College library</h2>
+</div>
+<div id="basics" class="section level1">
+<h1>Basics</h1>
+<p>The purpose of this mini-project is to explore some of the records of books from the Macalester College library. The data comes from tiny.cc and needs to be downloaded ONLY ONCE.</p>
+<pre class="r"><code>download.file(&quot;http://tiny.cc/dcf/Library-small.rda&quot;, dest = &quot;Library-small.rda&quot;)
+# only do once</code></pre>
+<p>Then load the information into R. It will create two data table objects, Inv and Bks. The library’s collection is in Inv. The Bks data table is about individual books that might or might not be in the library’s collection.</p>
+<pre class="r"><code>load(&quot;Library-small.rda&quot;)</code></pre>
+<p>It is always a good idea to check that the downloaded data looks reasonable.</p>
+<pre class="r"><code>head(Inv)</code></pre>
+<pre><code>## Source: local data frame [6 x 18]
+## Groups: Item.Type [1]
+## 
+##   Shelving.Location Item.Type       Call.Number                 Author
+##               &lt;chr&gt;     &lt;chr&gt;             &lt;chr&gt;                  &lt;chr&gt;
+## 1  Stacks - Level 3    VOLUME  HD9055 .B44 1989 Belasco, Warren James.
+## 2  Stacks - Level 3    VOLUME    HD31 .C53 1961     Churchman, C. West
+## 3  Stacks - Level 3    VOLUME PG3476.B2 A6 1993             Babelʹ, I.
+## 4  Stacks - Level 3    VOLUME JN30 .E94168 2010       Kaiser, Wolfram,
+## 5  Stacks - Level 4    VOLUME   B2929 .N67 1976        Norman, Richard
+## 6  Stacks - Level 3    VOLUME    N 7340 H7 1954          Hobson, R. L.
+## # ... with 14 more variables: Title.or.Description &lt;chr&gt;,
+## #   Textual.Holdings &lt;chr&gt;, Material.Format &lt;chr&gt;, OCLC.Number &lt;int&gt;,
+## #   ISBN &lt;chr&gt;, Item.Barcode &lt;chr&gt;, Cost &lt;chr&gt;, Current.Status &lt;chr&gt;,
+## #   Loan.Date.Due &lt;dttm&gt;, Issued.Count &lt;int&gt;, Issued.Count.YTD &lt;int&gt;,
+## #   Last.Issued.Date &lt;dttm&gt;, Last.Inventoried.Date &lt;dttm&gt;,
+## #   Item.Deleted.Date &lt;dttm&gt;</code></pre>
+<pre class="r"><code>str(Inv)</code></pre>
+<pre><code>## Classes &#39;grouped_df&#39;, &#39;tbl_df&#39;, &#39;tbl&#39; and &#39;data.frame&#39;:  2000 obs. of  18 variables:
+##  $ Shelving.Location    : chr  &quot;Stacks - Level 3&quot; &quot;Stacks - Level 3&quot; &quot;Stacks - Level 3&quot; &quot;Stacks - Level 3&quot; ...
+##  $ Item.Type            : chr  &quot;VOLUME&quot; &quot;VOLUME&quot; &quot;VOLUME&quot; &quot;VOLUME&quot; ...
+##  $ Call.Number          : chr  &quot;HD9055 .B44 1989&quot; &quot;HD31 .C53 1961&quot; &quot;PG3476.B2 A6 1993&quot; &quot;JN30 .E94168 2010&quot; ...
+##  $ Author               : chr  &quot;Belasco, Warren James.&quot; &quot;Churchman, C. West&quot; &quot;Babelʹ, I.&quot; &quot;Kaiser, Wolfram,&quot; ...
+##  $ Title.or.Description : chr  &quot;Appetite for change : how the counterculture took on the food industry, 1966-1988 /&quot; &quot;Prediction and optimal decision; philosophical issues of a science of values.&quot; &quot;Chetyre rasskaza /&quot; &quot;European Union history : themes and debates /&quot; ...
+##  $ Textual.Holdings     : chr  NA NA NA NA ...
+##  $ Material.Format      : chr  &quot;Book&quot; &quot;Book&quot; &quot;Book&quot; &quot;Book&quot; ...
+##  $ OCLC.Number          : int  19740110 228904 32110080 569523646 2732280 5128192 52386287 6944420 156834468 44502344 ...
+##  $ ISBN                 : chr  &quot;0394543998^9780394543994&quot; &quot;&quot; &quot;185399300&quot; &quot;0230232701^0230232698^9780230232693^9780230232709&quot; ...
+##  $ Item.Barcode         : chr  &quot;30527005082322&quot; &quot;30527021608449&quot; &quot;30527021072745&quot; &quot;30527023965441&quot; ...
+##  $ Cost                 : chr  &quot;USD 0.00&quot; &quot;USD 0.00&quot; &quot;USD 0.00&quot; &quot;USD 27.84&quot; ...
+##  $ Current.Status       : chr  &quot;AVAILABLE&quot; &quot;WITHDRAWN&quot; &quot;AVAILABLE&quot; &quot;AVAILABLE&quot; ...
+##  $ Loan.Date.Due        : POSIXct, format: NA NA ...
+##  $ Issued.Count         : int  26 0 0 1 1 1 1 3 1 2 ...
+##  $ Issued.Count.YTD     : int  1 0 0 0 0 0 0 0 0 0 ...
+##  $ Last.Issued.Date     : POSIXct, format: &quot;2015-03-25 19:35:52&quot; NA ...
+##  $ Last.Inventoried.Date: POSIXct, format: NA NA ...
+##  $ Item.Deleted.Date    : POSIXct, format: NA &quot;2015-03-24 11:48:51&quot; ...
+##  - attr(*, &quot;vars&quot;)=List of 1
+##   ..$ : symbol Item.Type
+##  - attr(*, &quot;drop&quot;)= logi TRUE
+##  - attr(*, &quot;indices&quot;)=List of 1
+##   ..$ : int  0 1 2 3 4 5 6 7 8 9 ...
+##  - attr(*, &quot;group_sizes&quot;)= int 2000
+##  - attr(*, &quot;biggest_group_size&quot;)= int 2000
+##  - attr(*, &quot;labels&quot;)=&#39;data.frame&#39;:   1 obs. of  1 variable:
+##   ..$ Item.Type: chr &quot;VOLUME&quot;
+##   ..- attr(*, &quot;vars&quot;)=List of 1
+##   .. ..$ : symbol Item.Type</code></pre>
+<pre class="r"><code>head(Bks)</code></pre>
+<pre><code>## # A tibble: 6 × 15
+##   OCLC.Number      Format                                         Subject
+##         &lt;int&gt;       &lt;chr&gt;                                           &lt;chr&gt;
+## 1        1179 Book, Print            Special Industries &amp; Trades, General
+## 2        9864 Book, Print                                History, General
+## 3       10413 Book, Print               Religions, Mythology, Rationalism
+## 4       10982 Book, Print                              English Literature
+## 5       11900 Book, Print             Print Media, Printmaking, Engraving
+## 6       23797 Book, Print History - Americas, General, Indian, N. America
+## # ... with 12 more variables: Title &lt;chr&gt;, Author &lt;chr&gt;,
+## #   Publication.Date &lt;int&gt;, Edition &lt;chr&gt;, Publisher &lt;chr&gt;, ISBN &lt;chr&gt;,
+## #   Language &lt;chr&gt;, Physical.Description &lt;chr&gt;, Genre &lt;chr&gt;,
+## #   LC.Call.Number &lt;chr&gt;, Dewey.Call.Number &lt;chr&gt;, Local.Call.Number &lt;chr&gt;</code></pre>
+<pre class="r"><code>str(Bks)</code></pre>
+<pre><code>## Classes &#39;tbl_df&#39;, &#39;tbl&#39; and &#39;data.frame&#39;:    3765 obs. of  15 variables:
+##  $ OCLC.Number         : int  1179 9864 10413 10982 11900 23797 32490 32490 32490 35437 ...
+##  $ Format              : chr  &quot;Book, Print&quot; &quot;Book, Print&quot; &quot;Book, Print&quot; &quot;Book, Print&quot; ...
+##  $ Subject             : chr  &quot;Special Industries &amp; Trades, General&quot; &quot;History, General&quot; &quot;Religions, Mythology, Rationalism&quot; &quot;English Literature&quot; ...
+##  $ Title               : chr  &quot;United States oil policy, 1890-1964; business and government in twentieth century America&quot; &quot;The historian as detective; essays on evidence.&quot; &quot;Religion in the Middle East: three religions in concord and conflict;&quot; &quot;Style in Hamlet.&quot; ...
+##  $ Author              : chr  &quot;Nash, Gerald D.&quot; &quot;Winks, Robin W.,&quot; &quot;Arberry, A. J.1905-1969.(Arthur John),&quot; &quot;Charney, Maurice.&quot; ...
+##  $ Publication.Date    : int  1968 1969 1969 1969 1969 1969 1969 1969 1969 1969 ...
+##  $ Edition             : chr  &quot;&quot; &quot;[1st ed.].&quot; &quot;&quot; &quot;&quot; ...
+##  $ Publisher           : chr  &quot;University of Pittsburgh Press&quot; &quot;Harper &amp;amp; Row&quot; &quot;Cambridge U.P.,&quot; &quot;Princeton University Press,&quot; ...
+##  $ ISBN                : chr  &quot;&quot; &quot;&quot; &quot;521074002&quot; &quot;691061483&quot; ...
+##  $ Language            : chr  &quot;English&quot; &quot;English&quot; &quot;English&quot; &quot;English&quot; ...
+##  $ Physical.Description: chr  &quot;ix, 286 pages&quot; &quot;xxiv, 543 pages&quot; &quot;2 v.&quot; &quot;xxii, 333 pages&quot; ...
+##  $ Genre               : chr  &quot;&quot; &quot;&quot; &quot;&quot; &quot;&quot; ...
+##  $ LC.Call.Number      : chr  &quot;HD9565&quot; &quot;D13&quot; &quot;BL1600&quot; &quot;PR2807&quot; ...
+##  $ Dewey.Call.Number   : chr  &quot;338.2/7/282&quot; &quot;907/.2&quot; &quot;200/.956&quot; &quot;822.3/3&quot; ...
+##  $ Local.Call.Number   : chr  &quot;HD 9565 N28&quot; &quot;D 13 W65&quot; &quot;BL1600 .A7&quot; &quot;PR2807 .C28&quot; ...</code></pre>
+</div>
+<div id="looking-at-the-data" class="section level1">
+<h1>Looking at the Data</h1>
+<p>Create new chunks to calculate the number of cases in each file, the names of the variables, and whatever else might occur to you.</p>
+<ol style="list-style-type: decimal">
+<li>How many books?</li>
+</ol>
+<pre class="r"><code>cases_Inv = tally(Inv)
+# number of cases in inventory
+# can also do nrow(Inv)
+cases_Bks = tally(Bks)
+# number of cases in books
+# can also do nrow(Bks)</code></pre>
+<ol start="2" style="list-style-type: decimal">
+<li>What are the variables?</li>
+</ol>
+<pre class="r"><code>names(Inv)</code></pre>
+<pre><code>##  [1] &quot;Shelving.Location&quot;     &quot;Item.Type&quot;            
+##  [3] &quot;Call.Number&quot;           &quot;Author&quot;               
+##  [5] &quot;Title.or.Description&quot;  &quot;Textual.Holdings&quot;     
+##  [7] &quot;Material.Format&quot;       &quot;OCLC.Number&quot;          
+##  [9] &quot;ISBN&quot;                  &quot;Item.Barcode&quot;         
+## [11] &quot;Cost&quot;                  &quot;Current.Status&quot;       
+## [13] &quot;Loan.Date.Due&quot;         &quot;Issued.Count&quot;         
+## [15] &quot;Issued.Count.YTD&quot;      &quot;Last.Issued.Date&quot;     
+## [17] &quot;Last.Inventoried.Date&quot; &quot;Item.Deleted.Date&quot;</code></pre>
+<pre class="r"><code># names of variables in inventory
+names(Bks)</code></pre>
+<pre><code>##  [1] &quot;OCLC.Number&quot;          &quot;Format&quot;               &quot;Subject&quot;             
+##  [4] &quot;Title&quot;                &quot;Author&quot;               &quot;Publication.Date&quot;    
+##  [7] &quot;Edition&quot;              &quot;Publisher&quot;            &quot;ISBN&quot;                
+## [10] &quot;Language&quot;             &quot;Physical.Description&quot; &quot;Genre&quot;               
+## [13] &quot;LC.Call.Number&quot;       &quot;Dewey.Call.Number&quot;    &quot;Local.Call.Number&quot;</code></pre>
+<pre class="r"><code># names of variables in books
+
+# Note: str(Inv) will give you the variable names and their types</code></pre>
+<ol start="3" style="list-style-type: decimal">
+<li>How many books does each author have in the library?</li>
+</ol>
+<pre class="r"><code>AuthorCount &lt;-
+  Inv %&gt;%
+  group_by(Author) %&gt;%
+  summarise(count = n())
+# group by author name and then count MUST USE N TO COUNT b/c nrow is not a reduction verb</code></pre>
+<ol start="4" style="list-style-type: decimal">
+<li>How many books are available (in some way) from each author?</li>
+</ol>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

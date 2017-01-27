@@ -4,6 +4,7 @@ output: html_document
 ---
 
 ```{r setup, include=FALSE}
+library(DataComputing)
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
@@ -11,7 +12,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # Basics
 The purpose of this mini-project is to explore some of the records of books from the Macalester College library. The data comes from tiny.cc and needs to be downloaded ONLY ONCE.
-```{r}
+```{r cache = TRUE}
 download.file("http://tiny.cc/dcf/Library-small.rda", dest = "Library-small.rda")
 # only do once
 ```

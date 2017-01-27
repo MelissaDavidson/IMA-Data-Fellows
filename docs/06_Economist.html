@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+
+
+<title>06_Economist</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-1.1/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-1.1/highlight.js"></script>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs && document.readyState && document.readyState === "complete") {
+   window.setTimeout(function() {
+      hljs.initHighlighting();
+   }, 0);
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">My Website</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">06_Economist</h1>
+
+</div>
+
+
+<pre class="r"><code># A Graph for the Economist
+# Original data too large - working with subset
+
+#download.file(&quot;http://tiny.cc./dcf/ScorecardSmall.Rda&quot;, destfile = &quot;ScorecardSmall.Rda&quot;)
+load(&quot;ScorecardSmall.Rda&quot;)</code></pre>
+<pre class="r"><code>library(dplyr)
+library(tidyr)</code></pre>
+<pre><code>## 
+## Attaching package: &#39;tidyr&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:Matrix&#39;:
+## 
+##     expand</code></pre>
+<pre class="r"><code># check that data looks reasonable
+head(ScorecardSmall)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">GRAD_DEBT_MDN_SUPP</th>
+<th align="right">TUITFTE</th>
+<th align="right">CONTROL</th>
+<th align="right">TUITIONFEE_IN</th>
+<th align="right">TUITIONFEE_OUT</th>
+<th align="right">AVGFACSAL</th>
+<th align="right">INEXPFTE</th>
+<th align="left">INSTNM</th>
+<th align="right">OPEID</th>
+<th align="right">CCSIZSET</th>
+<th align="right">CCUGPROF</th>
+<th align="right">ADM_RATE</th>
+<th align="right">RELAFFIL</th>
+<th align="right">RET_FT4</th>
+<th align="right">RET_FTL4</th>
+<th align="right">RET_PT4</th>
+<th align="right">RET_PTL4</th>
+<th align="right">NPT4_PUB</th>
+<th align="right">NPT4_PRIV</th>
+<th align="left">NPT4_PROG</th>
+<th align="left">NPT4_OTHER</th>
+<th align="right">NPT41_PUB</th>
+<th align="right">NPT42_PUB</th>
+<th align="right">NPT43_PUB</th>
+<th align="right">NPT44_PUB</th>
+<th align="right">NPT45_PUB</th>
+<th align="right">NPT41_PRIV</th>
+<th align="right">NPT42_PRIV</th>
+<th align="right">NPT43_PRIV</th>
+<th align="right">NPT44_PRIV</th>
+<th align="right">NPT45_PRIV</th>
+<th align="left">NPT41_PROG</th>
+<th align="left">NPT42_PROG</th>
+<th align="left">NPT43_PROG</th>
+<th align="left">NPT44_PROG</th>
+<th align="left">NPT45_PROG</th>
+<th align="left">NPT41_OTHER</th>
+<th align="left">NPT42_OTHER</th>
+<th align="left">NPT43_OTHER</th>
+<th align="left">NPT44_OTHER</th>
+<th align="left">NPT45_OTHER</th>
+<th align="right">NPT4_048_PUB</th>
+<th align="right">NPT4_048_PRIV</th>
+<th align="left">NPT4_048_PROG</th>
+<th align="left">NPT4_048_OTHER</th>
+<th align="right">NPT4_3075_PUB</th>
+<th align="right">NPT4_3075_PRIV</th>
+<th align="right">NPT4_75UP_PUB</th>
+<th align="right">NPT4_75UP_PRIV</th>
+<th align="left">NPT4_3075_PROG</th>
+<th align="left">NPT4_3075_OTHER</th>
+<th align="left">NPT4_75UP_PROG</th>
+<th align="left">NPT4_75UP_OTHER</th>
+<th align="left">PAR_ED_PCT_1STGEN</th>
+<th align="left">PAR_ED_PCT_MS</th>
+<th align="left">PAR_ED_PCT_HS</th>
+<th align="left">PAR_ED_PCT_PS</th>
+<th align="left">INC_PCT_LO</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">33611.5</td>
+<td align="right">9063</td>
+<td align="right">1</td>
+<td align="right">7182</td>
+<td align="right">12774</td>
+<td align="right">7079</td>
+<td align="right">7459</td>
+<td align="left">Alabama A &amp; M University</td>
+<td align="right">100200</td>
+<td align="right">14</td>
+<td align="right">9</td>
+<td align="right">0.90</td>
+<td align="right">NA</td>
+<td align="right">0.63</td>
+<td align="right">NA</td>
+<td align="right">0.50</td>
+<td align="right">NA</td>
+<td align="right">13415</td>
+<td align="right">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="right">12683</td>
+<td align="right">13292</td>
+<td align="right">16104</td>
+<td align="right">16944</td>
+<td align="right">15416</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="right">12807</td>
+<td align="right">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="right">14393</td>
+<td align="right">NA</td>
+<td align="right">16411</td>
+<td align="right">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">0.389901823</td>
+<td align="left">0.011687705</td>
+<td align="left">0.378214119</td>
+<td align="left">0.610098177</td>
+<td align="left">PrivacySuppressed</td>
+</tr>
+<tr class="even">
+<td align="left">23117</td>
+<td align="right">9033</td>
+<td align="right">1</td>
+<td align="right">7206</td>
+<td align="right">16398</td>
+<td align="right">10170</td>
+<td align="right">17208</td>
+<td align="left">University of Alabama at Birmingham</td>
+<td align="right">105200</td>
+<td align="right">15</td>
+<td align="right">8</td>
+<td align="right">0.87</td>
+<td align="right">NA</td>
+<td align="right">0.80</td>
+<td align="right">NA</td>
+<td align="right">0.50</td>
+<td align="right">NA</td>
+<td align="right">14805</td>
+<td align="right">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="right">12361</td>
+<td align="right">13765</td>
+<td align="right">16670</td>
+<td align="right">17096</td>
+<td align="right">17291</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="right">12846</td>
+<td align="right">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="right">15038</td>
+<td align="right">NA</td>
+<td align="right">17190</td>
+<td align="right">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">0.345362017</td>
+<td align="left">0.023132084</td>
+<td align="left">0.322229933</td>
+<td align="left">0.654637983</td>
+<td align="left">PrivacySuppressed</td>
+</tr>
+<tr class="odd">
+<td align="left">PrivacySuppressed</td>
+<td align="right">12057</td>
+<td align="right">2</td>
+<td align="right">6870</td>
+<td align="right">6870</td>
+<td align="right">3849</td>
+<td align="right">5123</td>
+<td align="left">Amridge University</td>
+<td align="right">2503400</td>
+<td align="right">6</td>
+<td align="right">6</td>
+<td align="right">NA</td>
+<td align="right">74</td>
+<td align="right">0.38</td>
+<td align="right">NA</td>
+<td align="right">0.33</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">7455</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">6736</td>
+<td align="right">9974</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="right">NA</td>
+<td align="right">7455</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="right">NA</td>
+<td align="right">9974</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">0.550314465</td>
+<td align="left">0.050314465</td>
+<td align="left">0.5</td>
+<td align="left">0.449685535</td>
+<td align="left">PrivacySuppressed</td>
+</tr>
+<tr class="even">
+<td align="left">24738</td>
+<td align="right">8322</td>
+<td align="right">1</td>
+<td align="right">9192</td>
+<td align="right">21506</td>
+<td align="right">9341</td>
+<td align="right">9352</td>
+<td align="left">University of Alabama in Huntsville</td>
+<td align="right">105500</td>
+<td align="right">12</td>
+<td align="right">8</td>
+<td align="right">0.81</td>
+<td align="right">NA</td>
+<td align="right">0.81</td>
+<td align="right">NA</td>
+<td align="right">0.44</td>
+<td align="right">NA</td>
+<td align="right">17520</td>
+<td align="right">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="right">14652</td>
+<td align="right">16334</td>
+<td align="right">19016</td>
+<td align="right">20263</td>
+<td align="right">20306</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="right">15239</td>
+<td align="right">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="right">17621</td>
+<td align="right">NA</td>
+<td align="right">20283</td>
+<td align="right">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">0.337618781</td>
+<td align="left">0.023476803</td>
+<td align="left">0.314141979</td>
+<td align="left">0.662381219</td>
+<td align="left">0.488624612</td>
+</tr>
+<tr class="odd">
+<td align="left">33452</td>
+<td align="right">7813</td>
+<td align="right">1</td>
+<td align="right">8720</td>
+<td align="right">15656</td>
+<td align="right">6557</td>
+<td align="right">7393</td>
+<td align="left">Alabama State University</td>
+<td align="right">100500</td>
+<td align="right">13</td>
+<td align="right">9</td>
+<td align="right">0.51</td>
+<td align="right">NA</td>
+<td align="right">0.62</td>
+<td align="right">NA</td>
+<td align="right">0.30</td>
+<td align="right">NA</td>
+<td align="right">11936</td>
+<td align="right">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="right">12342</td>
+<td align="right">10811</td>
+<td align="right">11362</td>
+<td align="right">13079</td>
+<td align="right">2948</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="right">12074</td>
+<td align="right">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="right">10986</td>
+<td align="right">NA</td>
+<td align="right">10594</td>
+<td align="right">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">0.377664652</td>
+<td align="left">0.016226535</td>
+<td align="left">0.361438116</td>
+<td align="left">0.622335348</td>
+<td align="left">0.688963211</td>
+</tr>
+<tr class="even">
+<td align="left">24000</td>
+<td align="right">12198</td>
+<td align="right">1</td>
+<td align="right">9450</td>
+<td align="right">23950</td>
+<td align="right">9605</td>
+<td align="right">9817</td>
+<td align="left">The University of Alabama</td>
+<td align="right">105100</td>
+<td align="right">16</td>
+<td align="right">10</td>
+<td align="right">0.57</td>
+<td align="right">NA</td>
+<td align="right">0.87</td>
+<td align="right">NA</td>
+<td align="right">0.66</td>
+<td align="right">NA</td>
+<td align="right">20916</td>
+<td align="right">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="right">17206</td>
+<td align="right">19960</td>
+<td align="right">21363</td>
+<td align="right">23115</td>
+<td align="right">23748</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="right">18113</td>
+<td align="right">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="right">20725</td>
+<td align="right">NA</td>
+<td align="right">23479</td>
+<td align="right">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">0.260525012</td>
+<td align="left">0.010029718</td>
+<td align="left">0.250495295</td>
+<td align="left">0.739474988</td>
+<td align="left">0.302561681</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>str(ScorecardSmall)</code></pre>
+<pre><code>## &#39;data.frame&#39;:    7804 obs. of  58 variables:
+##  $ GRAD_DEBT_MDN_SUPP: chr  &quot;33611.5&quot; &quot;23117&quot; &quot;PrivacySuppressed&quot; &quot;24738&quot; ...
+##  $ TUITFTE           : int  9063 9033 12057 8322 7813 12198 2371 5094 7625 13186 ...
+##  $ CONTROL           : int  1 1 2 1 1 1 1 1 1 1 ...
+##  $ TUITIONFEE_IN     : int  7182 7206 6870 9192 8720 9450 4200 NA 8750 9852 ...
+##  $ TUITIONFEE_OUT    : int  12774 16398 6870 21506 15656 23950 7500 NA 24950 26364 ...
+##  $ AVGFACSAL         : int  7079 10170 3849 9341 6557 9605 5805 7672 7173 9429 ...
+##  $ INEXPFTE          : int  7459 17208 5123 9352 7393 9817 5935 6176 6817 11324 ...
+##  $ INSTNM            : chr  &quot;Alabama A &amp; M University&quot; &quot;University of Alabama at Birmingham&quot; &quot;Amridge University&quot; &quot;University of Alabama in Huntsville&quot; ...
+##  $ OPEID             : int  100200 105200 2503400 105500 100500 105100 100700 100800 831000 100900 ...
+##  $ CCSIZSET          : int  14 15 6 12 13 16 2 9 12 15 ...
+##  $ CCUGPROF          : int  9 8 6 8 9 10 3 5 8 13 ...
+##  $ ADM_RATE          : num  0.899 0.867 NA 0.806 0.512 ...
+##  $ RELAFFIL          : int  NA NA 74 NA NA NA NA NA NA NA ...
+##  $ RET_FT4           : num  0.631 0.802 0.375 0.81 0.622 ...
+##  $ RET_FTL4          : num  NA NA NA NA NA ...
+##  $ RET_PT4           : num  0.5 0.5 0.333 0.444 0.302 ...
+##  $ RET_PTL4          : num  NA NA NA NA NA ...
+##  $ NPT4_PUB          : int  13415 14805 NA 17520 11936 20916 6407 NA 11915 17541 ...
+##  $ NPT4_PRIV         : int  NA NA 7455 NA NA NA NA NA NA NA ...
+##  $ NPT4_PROG         : logi  NA NA NA NA NA NA ...
+##  $ NPT4_OTHER        : logi  NA NA NA NA NA NA ...
+##  $ NPT41_PUB         : int  12683 12361 NA 14652 12342 17206 6330 NA 9044 13191 ...
+##  $ NPT42_PUB         : int  13292 13765 NA 16334 10811 19960 6032 NA 11037 16272 ...
+##  $ NPT43_PUB         : int  16104 16670 NA 19016 11362 21363 7802 NA 14542 18240 ...
+##  $ NPT44_PUB         : int  16944 17096 NA 20263 13079 23115 10512 NA 15537 19276 ...
+##  $ NPT45_PUB         : int  15416 17291 NA 20306 2948 23748 NA NA 15579 20142 ...
+##  $ NPT41_PRIV        : int  NA NA 6736 NA NA NA NA NA NA NA ...
+##  $ NPT42_PRIV        : int  NA NA 9974 NA NA NA NA NA NA NA ...
+##  $ NPT43_PRIV        : int  NA NA NA NA NA NA NA NA NA NA ...
+##  $ NPT44_PRIV        : int  NA NA NA NA NA NA NA NA NA NA ...
+##  $ NPT45_PRIV        : int  NA NA NA NA NA NA NA NA NA NA ...
+##  $ NPT41_PROG        : logi  NA NA NA NA NA NA ...
+##  $ NPT42_PROG        : logi  NA NA NA NA NA NA ...
+##  $ NPT43_PROG        : logi  NA NA NA NA NA NA ...
+##  $ NPT44_PROG        : logi  NA NA NA NA NA NA ...
+##  $ NPT45_PROG        : logi  NA NA NA NA NA NA ...
+##  $ NPT41_OTHER       : logi  NA NA NA NA NA NA ...
+##  $ NPT42_OTHER       : logi  NA NA NA NA NA NA ...
+##  $ NPT43_OTHER       : logi  NA NA NA NA NA NA ...
+##  $ NPT44_OTHER       : logi  NA NA NA NA NA NA ...
+##  $ NPT45_OTHER       : logi  NA NA NA NA NA NA ...
+##  $ NPT4_048_PUB      : int  12807 12846 NA 15239 12074 18113 6312 NA 9521 14167 ...
+##  $ NPT4_048_PRIV     : int  NA NA 7455 NA NA NA NA NA NA NA ...
+##  $ NPT4_048_PROG     : logi  NA NA NA NA NA NA ...
+##  $ NPT4_048_OTHER    : logi  NA NA NA NA NA NA ...
+##  $ NPT4_3075_PUB     : int  14393 15038 NA 17621 10986 20725 6676 NA 13052 17463 ...
+##  $ NPT4_3075_PRIV    : int  NA NA 9974 NA NA NA NA NA NA NA ...
+##  $ NPT4_75UP_PUB     : int  16411 17190 NA 20283 10594 23479 10512 NA 15556 19812 ...
+##  $ NPT4_75UP_PRIV    : int  NA NA NA NA NA NA NA NA NA NA ...
+##  $ NPT4_3075_PROG    : logi  NA NA NA NA NA NA ...
+##  $ NPT4_3075_OTHER   : logi  NA NA NA NA NA NA ...
+##  $ NPT4_75UP_PROG    : logi  NA NA NA NA NA NA ...
+##  $ NPT4_75UP_OTHER   : logi  NA NA NA NA NA NA ...
+##  $ PAR_ED_PCT_1STGEN : chr  &quot;0.389901823&quot; &quot;0.345362017&quot; &quot;0.550314465&quot; &quot;0.337618781&quot; ...
+##  $ PAR_ED_PCT_MS     : chr  &quot;0.011687705&quot; &quot;0.023132084&quot; &quot;0.050314465&quot; &quot;0.023476803&quot; ...
+##  $ PAR_ED_PCT_HS     : chr  &quot;0.378214119&quot; &quot;0.322229933&quot; &quot;0.5&quot; &quot;0.314141979&quot; ...
+##  $ PAR_ED_PCT_PS     : chr  &quot;0.610098177&quot; &quot;0.654637983&quot; &quot;0.449685535&quot; &quot;0.662381219&quot; ...
+##  $ INC_PCT_LO        : chr  &quot;PrivacySuppressed&quot; &quot;PrivacySuppressed&quot; &quot;PrivacySuppressed&quot; &quot;0.488624612&quot; ...</code></pre>
+<pre class="r"><code># do not need Control = 3
+ScorecardSmall_not3 &lt;- 
+  ScorecardSmall %&gt;% 
+  filter(CONTROL != 3)</code></pre>
+<pre class="r"><code># Select just the variables you need from the Scorecard data
+# CONTROL - 1 for public and 2 for private
+# ADM_RATE - admissions rate in percent
+# NPT41_PUB - average net cost for students in public inst whose family income is in the 1st quartile
+# NPT41_PRIV - average net cost for students in private inst whose family income is in the 1st quartile
+# NPT43_PUB - average net cost for students in public inst whose family income is in the 3rd quartile
+# NPT43_PRIV - average net cost for students in private inst whose family income is in the 3rd quartile
+# NPT45_PUB - average net cost for students in public inst whose family income is in the 5th quartile
+# NPT45_PRIV - average net cost for students in private inst whose family income is in the 5th quartile
+
+ScorecardVariables &lt;- 
+  ScorecardSmall_not3 %&gt;% 
+  select(CONTROL, ADM_RATE, NPT41_PUB, NPT41_PRIV, NPT43_PUB, NPT43_PRIV, NPT45_PUB, NPT45_PRIV)</code></pre>
+<pre class="r"><code># use gather() to convert from wide to narrow format
+NarrowFormat&lt;- 
+  ScorecardVariables %&gt;% 
+  gather(long_name,netCost,NPT41_PUB:NPT45_PRIV)</code></pre>
+<pre class="r"><code># question 3
+Quartile &lt;- 
+  read.csv(&quot;http://tiny.cc/dcf/NPT4-names.csv&quot;, stringsAsFactors = TRUE)</code></pre>
+<pre class="r"><code># join narrowed data to quartile data
+JoinedData &lt;- 
+  NarrowFormat %&gt;% 
+  left_join(Quartile)</code></pre>
+<pre><code>## Joining, by = &quot;long_name&quot;</code></pre>
+<pre><code>## Warning in left_join_impl(x, y, by$x, by$y, suffix$x, suffix$y): joining
+## factor and character vector, coercing into character vector</code></pre>
+<pre class="r"><code># divide netCost by 1000
+JoinedDivided &lt;- 
+  mutate(JoinedData, netCost = netCost/1000) %&gt;% 
+  filter(CONTROL %in% c(1:2), short_name %in% c(&quot;Q1&quot;, &quot;Q3&quot;, &quot;Q5&quot;))</code></pre>
+<pre class="r"><code>JoinedDivided %&gt;% 
+  ggplot(aes(x = ADM_RATE, y = netCost)) +
+  geom_point(color = &quot;blue&quot;, alpha = 0.2) +
+  geom_smooth() +
+  facet_grid(CONTROL ~ short_name) +
+  labs(x = &quot;Admission rate, %&quot;, y = &quot;Net cost per year, $&#39;000&quot;)</code></pre>
+<pre><code>## `geom_smooth()` using method = &#39;gam&#39;</code></pre>
+<pre><code>## Warning: Removed 19216 rows containing non-finite values (stat_smooth).</code></pre>
+<pre><code>## Warning: Removed 19216 rows containing missing values (geom_point).</code></pre>
+<p><img src="06_Economist_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

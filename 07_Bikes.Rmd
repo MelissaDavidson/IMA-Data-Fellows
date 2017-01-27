@@ -1,0 +1,106 @@
+---
+title: "07_Bikes"
+output: html_document
+---
+
+```{r}
+# attach necessary packages
+library(dplyr)
+library(lubridate)
+library(ggplot2)
+```
+
+```{r cache = TRUE}
+# Bicycle Rentals
+# download data
+
+data_site <- 
+  "http://tiny.cc/dcf/2014-Q4-Trips-History-Data-Small.rds"
+
+Trips <- 
+  readRDS(gzcon(url(data_site)))
+```
+
+```{r}
+# check to see if data reasonable
+head(Trips)
+str(Trips)
+```
+
+```{r}
+# density plot of events versus sdate
+Trips %>% 
+  ggplot(aes(x = sdate)) +
+  geom_density()
+```
+
+```{r}
+# density plot of events vs time of day
+# first extract hour and minute
+TripsDate <- 
+  Trips %>%
+  mutate(time_of_day = hour(sdate) + minute(sdate) / 60)
+```
+
+```{r}
+# density plot of events vs time of day
+TripsDate %>% 
+  ggplot(aes(x = time_of_day)) +
+  geom_density()
+```
+
+```{r}
+# facet by day of the week
+TripsWeekday <- 
+  TripsDate %>% 
+  mutate(day_of_week = wday(sdate, label = TRUE))
+```
+
+```{r}
+TripsWeekday %>% 
+  ggplot(aes(x = time_of_day)) + 
+  geom_density() + 
+  facet_wrap(~ day_of_week)
+```
+
+```{r}
+# set fill aesthetic for geom_density() to the client variable
+TripsWeekday %>% 
+  ggplot(aes(x = time_of_day)) + 
+  geom_density(aes(fill = client), color = NA, alpha = 0.5) + 
+  facet_wrap(~ day_of_week)
+```
+
+```{r}
+# same as above but useing geom_density() with the argument position = position_stack
+TripsWeekday %>% 
+  ggplot(aes(x = time_of_day)) + 
+  geom_density(aes(fill = client), color = NA, alpha = 0.5, position = position_stack()) + 
+  facet_wrap(~ day_of_week)
+```
+
+```{r}
+# create new faceting variable
+TripsNewFacet <- 
+  TripsWeekday %>% 
+  mutate(day_of_week = ifelse(wday(sdate) %in% c(1,7), "weekend", "weekday"))
+```
+
+```{r}
+# density plot with the new facet
+TripsNewFacet %>% 
+   ggplot(aes(x = time_of_day)) + 
+  geom_density(aes(fill = client), color = NA, alpha = 0.5, position = position_stack()) + 
+  facet_wrap(~ day_of_week)
+```
+
+```{r}
+# better to facet on day_of_week and fill with client or vice versa
+TripsNewFacet %>% 
+   ggplot(aes(x = time_of_day)) + 
+  geom_density(aes(fill = day_of_week), color = NA, alpha = 0.5, position = position_stack()) + 
+  facet_wrap(~ client)
+```
+
+
+

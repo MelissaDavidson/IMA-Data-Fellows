@@ -1,0 +1,108 @@
+---
+title: "06_Economist"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+require(DataComputing)
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r cache = TRUE}
+# A Graph for the Economist
+# Original data too large - working with subset
+
+#download.file("http://tiny.cc./dcf/ScorecardSmall.Rda", destfile = "ScorecardSmall.Rda")
+load("ScorecardSmall.Rda")
+```
+
+```{r}
+library(dplyr)
+library(tidyr)
+```
+
+```{r}
+# check that data looks reasonable
+head(ScorecardSmall)
+str(ScorecardSmall)
+```
+
+```{r}
+# do not need Control = 3
+ScorecardSmall_not3 <- 
+  ScorecardSmall %>% 
+  filter(CONTROL != 3)
+```
+
+```{r}
+# Select just the variables you need from the Scorecard data
+# CONTROL - 1 for public and 2 for private
+# ADM_RATE - admissions rate in percent
+# NPT41_PUB - average net cost for students in public inst whose family income is in the 1st quartile
+# NPT41_PRIV - average net cost for students in private inst whose family income is in the 1st quartile
+# NPT43_PUB - average net cost for students in public inst whose family income is in the 3rd quartile
+# NPT43_PRIV - average net cost for students in private inst whose family income is in the 3rd quartile
+# NPT45_PUB - average net cost for students in public inst whose family income is in the 5th quartile
+# NPT45_PRIV - average net cost for students in private inst whose family income is in the 5th quartile
+
+ScorecardVariables <- 
+  ScorecardSmall_not3 %>% 
+  select(CONTROL, ADM_RATE, NPT41_PUB, NPT41_PRIV, NPT43_PUB, NPT43_PRIV, NPT45_PUB, NPT45_PRIV)
+```
+
+```{r}
+# use gather() to convert from wide to narrow format
+NarrowFormat<- 
+  ScorecardVariables %>% 
+  gather(long_name,netCost,NPT41_PUB:NPT45_PRIV)
+```
+
+```{r}
+# question 3
+Quartile <- 
+  read.csv("http://tiny.cc/dcf/NPT4-names.csv", stringsAsFactors = TRUE)
+```
+
+```{r}
+# join narrowed data to quartile data
+JoinedData <- 
+  NarrowFormat %>% 
+  left_join(Quartile)
+```
+
+```{r}
+# divide netCost by 1000
+JoinedDivided <- 
+  mutate(JoinedData, netCost = netCost/1000) %>% 
+  filter(CONTROL %in% c(1:2), short_name %in% c("Q1", "Q3", "Q5"))
+```
+
+```{r}
+JoinedDivided %>% 
+  ggplot(aes(x = ADM_RATE, y = netCost)) +
+  geom_point(color = "blue", alpha = 0.2) +
+  geom_smooth() +
+  facet_grid(CONTROL ~ short_name) +
+  labs(x = "Admission rate, %", y = "Net cost per year, $'000")
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
