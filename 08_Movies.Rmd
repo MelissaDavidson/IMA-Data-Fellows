@@ -1,0 +1,155 @@
+---
+title: "08_Movies"
+output: html_document
+---
+
+```{r}
+# download data
+# download.file("http://tiny.cc/dcf/MovieLens.rda", destfile = "MovieLens.rda")
+# 
+# library(dplyr)
+# library(ggplot2)
+# library(tidyr)
+```
+
+```{r}
+# load data
+load("MovieLens.rda")
+
+# check for niceness
+# three tables: Movies, Ratings, Users
+head(Movies)
+str(Movies)
+```
+
+# Task 1
+
+Goal: Appeal of different genres to different sexes
+
+## Method:
+
+Data Sets:
+-`Users` data table because that is where sex is stored. Variables:
+  -`user_id`
+  -`sex`
+-`Movies` data table because that is where the genres are stored. Variables:
+  -`movie_id`
+  -genre columns
+-Primary data will be ratings, from the Ratings table. Variables:
+  -`rating`
+  -`user_id`
+  -`movie_id`
+
+Visualization:
+-Frame: x-axis is difference between average ratings per genre, y-axis is genre
+-Glyph: Bar chart
+-Statistics: Confidence interval
+
+genre, difference between average ratings
+
+```{r}
+# consolidating the variables we need into a single table
+CombinedRatings <- 
+  Ratings %>% 
+  select(-time_stamp) %>% 
+  left_join(Users %>% select(user_id, sex), 
+            by = "user_id") %>% 
+  left_join(Movies %>% select(-movie_title, -release_date, -IMDb_URL), 
+            by = "movie_id")
+```
+
+
+Now we gather the ratings into genre and sex and perform stats.
+```{r}
+# look at sex and genre as case
+# then average rating (by sex and genre) and number of that sex who voted for that genre
+# have head() to check results look reasonable as we go
+GenreRatings <- 
+  CombinedRatings %>% 
+#  head(50) %>% 
+  gather(genre, value, unknown:Western) %>% 
+  filter(value) %>% 
+  group_by(sex, genre) %>% 
+  summarise(avgRating = mean(rating), numRatings = n(),
+            stdError = sd(rating) / sqrt(n()))
+```
+
+Data is ready for plotting
+
+```{r}
+# plot some data!
+# genre vs avgRating by sex
+GenreRatings %>% 
+  ggplot(aes(x = genre, y = avgRating, color = sex)) + #fill = sex when using bar
+ # geom_bar(position = "dodge", stat = "identity") + #bc bars do nothing for us
+  geom_point() +
+  geom_line(aes(group = genre)) + # gives a visual for difference between sexes
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+```
+
+```{r}
+# plot some data!
+# genre vs number of votes by sex
+GenreRatings %>% 
+  ggplot(aes(x = genre, y = numRatings, fill = sex)) +
+  geom_bar(position = "dodge", stat = "identity") +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+```
+
+```{r}
+# plot some data!
+# genre vs number of votes by sex
+GenreRatings %>% 
+  select(-numRatings, -stdError) %>% 
+  filter(genre != "unknown") %>% 
+  spread(sex, avgRating) %>% # get rid of columns do NOT want to appear in output
+  mutate(diff = M - F) %>% 
+  ggplot(aes(x = reorder(genre, diff), y = diff, fill = sign(diff))) +
+  geom_bar(position = "dodge", stat = "identity") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  ylab("Rating Different (M - F)") +
+  guides(fill = FALSE)
+
+  # also works
+  # mutate(diff = M - F, sign = sign(diff)) %>% 
+  # ggplot(aes(x = genre, y = diff, fill = sign) +
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
