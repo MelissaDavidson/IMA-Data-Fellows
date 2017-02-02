@@ -1,0 +1,85 @@
+---
+title: "Housing_Pricing"
+output: html_document
+---
+
+```{r cache = TRUE}
+# load data
+
+Houses <- 
+  read.csv("http://tiny.cc/mosaic/SaratogaHouses.csv", stringsAsFactors = FALSE)
+
+# check
+head(Houses)
+str(Houses)
+```
+
+```{r}
+# load libraries
+
+library(ggplot)
+library(stats)
+library(mosaic)
+```
+
+```{r}
+# compare mean price for houses with and without fireplaces
+
+mean(Price ~ Fireplace, data = Houses)
+# judging from the answer, houses with fireplaces are worth about $70k more
+# this is NOT good
+# leaves out everything else that might affect price
+```
+
+```{r}
+# add square footage to calculation
+
+mod <-
+  lm(Price ~ Fireplace + Living.Area, data = Houses)
+
+coef(mod)
+# fireplaces now shown to be worth less
+```
+
+
+```{r}
+# add square footage to calculation
+
+mod <-
+  lm(Price ~ Fireplace + Living.Area + Baths, data = Houses)
+
+coef(mod)
+```
+
+
+```{r}
+# add square footage to calculation
+
+mod <-
+  lm(Price ~ Fireplace + Living.Area + Baths + Bedrooms, data = Houses)
+
+coef(mod)
+# coef reflect partial derivative w.r.t. response variable
+# value of bedroom holding living area constant
+```
+
+```{r}
+# kitchen sink model, throw everything out
+
+mod <-
+  lm(Price ~ ., data = Houses)
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+

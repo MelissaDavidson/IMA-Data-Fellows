@@ -1,0 +1,110 @@
+---
+atitle: "Second_Shiny_App"
+runtime: shiny
+output: html_document
+---
+
+```{r echo = FALSE}
+library(shiny)
+library(ggplot2)
+library(dplyr)
+```
+
+This R Markdown document is made interactive using Shiny. Unlike the more traditional workflow of creating static reports, you can now create documents that allow your readers to change the assumptions underlying your analysis and see the results immediately. 
+
+```{r echo = FALSE}
+# action button
+actionButton("one", label = "My label is ...", width = "50%")
+
+#check box
+#checkboxInput("two", label = "Include outliers?", value = TRUE)
+checkboxInput("two", label = "Iris data?", value = TRUE)
+```
+
+Remember to choose the best date.
+
+```{r echo = FALSE}
+# Date input
+#dateInput("three", label = "My favorite day", language = "sq")
+dateInput("three", label = "My favorite day")
+```
+
+```{r echo = FALSE}
+#render plot
+renderPlot({
+  if(input$two){
+    iris %>% 
+      ggplot(aes(x = Sepal.Length, y = Sepal.Width)) +
+      geom_point()
+  }
+  else{}
+})
+
+# inserting a reactive thing
+fred <- 
+  reactive({
+    x <- sqrt(input$one)
+  })
+
+state_of_system <- 
+  reactiveValues()
+```
+
+```{r echo = FALSE}
+# make an output
+#renderText("Hello, World") - now make more complicated
+#renderText(paste("Hello, World", input$one)) # when you press "My label is..." button on webpage, this counts it
+#renderText(paste("Hello, World", rnorm(1))) # no longer attached to input$one, generates a random number
+# renderText({
+#   input$three # connecting to calendar
+#   paste("Hello, World number", rnorm(1))
+# })
+
+# changes output whatever input you change
+# renderText({
+#   input$one
+#   input$two
+#   input$three # connecting to calendar
+#   paste("Hello, World number", rnorm(1))
+# })
+
+# renderText({
+#   input$one
+#   input$two
+#   input$three
+#   paste("Hello, World number", lubridate::year(input$three)) # pull out year
+# })
+
+# renderText({
+#   input$one
+#   input$two
+#   input$three
+#   paste("Hello, World number", fred(), lubridate::year(input$three)) # pull out year
+# })
+
+renderText({
+  input$one
+  input$two
+  input$three
+  state_of_system$activated <- TRUE
+  paste("Hello, World number", fred(), lubridate::year(input$three)) # pull out year
+})
+```
+
+```{r echo = FALSE}
+# make a render table
+# renderTable({
+#   mtcars
+#   
+#   if(input$two) iris
+#   else mtcars
+# })
+
+# using a reactive (state_of_system)
+renderTable({
+  state_of_system$activated
+  if(input$two) iris
+  else mtcars
+})
+```
+

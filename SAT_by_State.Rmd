@@ -1,0 +1,276 @@
+---
+title: "SAT_by_State"
+output: html_document
+---
+
+```{r}
+library(stats) #for lm
+```
+
+```{r}
+require(mosaic)
+View(SAT)
+```
+
+```{r}
+# look at spending
+lm(sat~expend, data = SAT)
+# this says more spending means lower scores
+# shows more samples not always better?
+```
+
+```{r}
+# create artificial world with many states
+# do by taking hat and copying table many times
+# cut up in strips
+# throw in hat
+# now have many states, each just like a real state; proportionality of states just like real world
+# pick set of 50
+# do it again and again
+# it's called BOOTSTRAPPING
+
+# example
+# set <- 1:5
+# resample(set)
+# get different results every time you run it
+
+resample(SAT)
+# roughly 1 in 3 chance any case left out when sampling
+```
+
+```{r}
+lm(sat ~ expend, data = resample(SAT))
+# get different coef each time you run
+```
+
+```{r}
+# what is typical variation in regards to sampling
+# do that 500 times
+trials <- 
+  do(500) * lm(sat ~ expend, data = resample(SAT))
+
+# get coef
+# then there is other diagnostic stuff
+# sigma = st dev of residuals
+# r-squared
+# talk about F later
+
+# look at density plot
+trials %>% 
+  ggplot(aes(x = expend)) +
+  geom_density()
+```
+
+```{r}
+# do more trials
+# 500 is pretty much enough for most purposes
+# what if we had 1000 states
+
+trials <- 
+  do(500) * lm(sat ~ expend, data = resample(SAT, size = 1000))
+# size can be whatever. 4000 if you want
+
+trials %>% 
+  ggplot(aes(x = expend)) +
+  geom_density()
+
+# recall: confidence interval is 1 over root n
+```
+
+```{r}
+# can get confidence interval by doing actual model and then asking for conf int on coef
+
+mod <-
+  lm(sat ~ expend, data = SAT)
+
+confint(mod)
+```
+
+```{r}
+# instead of conf int, we see a table
+# called a REGRESSION TABLE
+summary(mod)
+```
+
+```{r}
+# want expend to have nothing to do with sat
+# lm(sat ~ shuffle(expend), data = SAT)
+# shuffle expend
+# guarantees no relationship (except accidental) between expend and sat
+# called a PERMUTATION TEST
+# sampling distribution under the null hypothesis - means nothing going on under explanatory variable
+# In a world with nothing going on, is the answer we got plausible?
+# What's the possibility we get a result as strong as ours in a world with nothing going on? It's called a P-VALUE. We use both tails, so it's a TWO-SIDED P-VALUE.
+# DON'T FALL INTO TRAP OF TAKING P-VALUE SERIOUSLY
+# p-value is for rejecting a null hypothesis
+
+trials <- 
+  do(500) * lm(sat ~ shuffle(expend), data = SAT)
+
+trials %>% 
+  ggplot(aes(x = expend)) +
+  geom_density()
+```
+
+```{r}
+# other factors than expend affect scores
+
+SAT %>% 
+  ggplot(aes(x = expend, y = sat)) +
+  geom_point()
+```
+
+```{r}
+# what factors have influence on scores
+
+mod <- 
+  lm(sat ~ expend, data = SAT)
+
+plot(mod)
+# residuals vs leverage shows which pts have lots of leverage
+```
+
+```{r}
+# instead of expend, let's use fraction
+SAT %>% 
+  ggplot(aes(x = frac, y = sat)) +
+  geom_point()
+# shows fraction is a big thing
+```
+
+```{r}
+# but how does expend affect scores
+SAT %>% 
+  ggplot(aes(x = frac, y = expend)) +
+  geom_point()
+```
+
+```{r}
+# What effect does expend have on SAT scores?
+# maybe divide data into groups based on frac
+
+SAT2 <- 
+  SAT %>% 
+  mutate(group = ntile(frac, 3)) # something wrong with ntile
+
+lm(sat ~ expend * group, data = SAT2)
+
+lm(sat ~ expend + group, data = SAT2)
+
+# introducing extra model terms can mess you up, called polarity?
+
+rsquared(lm(expend ~ frac, data = SAT2))
+rsquared(lm(expend ~ frac + expend:frac, data = SAT2))
+```
+
+```{r}
+# need better way to talk about effect of each variable
+# dominant way to deal with problem is to NOT include interaction terms in model
+# interaction terms: frac * expend, or frac:expend depending on where you've listed it
+
+# going to look at ANALYSIS OF VARIANCE
+
+# what happens when you have a lot of colinearity?
+
+mod <- 
+  lm(sat ~ expend + frac, data = SAT2)
+
+summary(mod)
+```
+
+```{r}
+# what if instead of just frac we include other stuff
+
+mod <- 
+  lm(sat ~ expend + frac + salary, data = SAT2)
+
+summary(mod)
+# shows salary not doing anything
+
+# what if take out expend
+mod <- 
+  lm(sat ~ frac + salary, data = SAT2)
+
+summary(mod)
+# now salary is doing something
+
+# so SIMPSONS PARADOX means we can shop around for effect we want
+
+mod <- 
+  lm(sat ~ frac + salary + expend + ratio, data = SAT2)
+
+summary(mod)
+
+# throw in some interaction terms
+mod <- 
+  lm(sat ~ frac * salary * expend * ratio, data = SAT2)
+
+summary(mod)
+# no determinants of SAT scores - not a good way
+
+# don't take p-val series - but other people do
+# Conf int beat p-val
+# can't include just anything in model, could hurt
+```
+
+```{r}
+rsquared(lm(sat ~ state, data = SAT))
+# this is silly
+```
+
+```{r}
+# ANALYSIS OF VARIANCE - ANOVA
+
+# stats class says it's for comparing means of various groups
+
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

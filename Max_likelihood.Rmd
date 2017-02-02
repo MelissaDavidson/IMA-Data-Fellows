@@ -1,0 +1,134 @@
+---
+title: "Guess_And_Check"
+output: html_document
+---
+
+```{r include = FALSE}
+library(mosaic)
+data(CPS85)
+```
+
+```{r}
+# Build a model of wage ~ age
+#L = likelihood fnct
+
+##################
+#################
+# TYPO, DEVS VARIABLE IS NOT CREATED
+L <- 
+  function(params) {
+    a <- params[1]
+    b <- params[2]
+    sigma <- params[3]
+    
+    with(CPS85,
+         devs <- wage - (a * age + b)) # what we observer minus what model says, devs = my deviations
+    
+    probs <- 
+      dnorm(devs, mean = 0, sd = sigma) # gives set of probs, one for each data pt
+  #  browser()
+    prod(probs)
+  }
+```
+
+```{r}
+# Check above
+L(c(1, -10, 2))
+head(log(probs)) # instead of multiply probs, we add them
+
+```
+
+```{r}
+#
+
+LL <- 
+  function(params) {
+    a <- params[1]
+    b <- params[2]
+    sigma <- params[3]
+    
+    with(CPS85,devs <- wage - (a*age + b)) # what we observer minus what model says, devs = my deviations
+    
+    probs <- 
+      dnorm(devs, mean = 0, sd = sigma) # gives set of probs, one for each data pt
+   # browser()
+    sum(log(probs))
+  }
+```
+
+```{r}
+# Manual hill climbing
+LL(c(1, -10, 2))
+
+LL(c(.5, -10, 2))
+```
+
+```{r}
+# Optimize
+
+optim(c(.5, -10, 2), LL, control = list(fnscale = -1))
+
+```
+
+```{r}
+# Let's see
+mod1 <- 
+  lm(wage ~ age, data = CPS85)
+coef(mod1)
+sd(resid(mod1))
+
+```
+
+```{r}
+#
+
+```
+
+```{r}
+#
+
+```
+
+```{r}
+#
+
+```
+
+
+```{r}
+#
+
+```
+
+```{r}
+#
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

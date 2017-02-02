@@ -1,0 +1,35 @@
+---
+title: "Shiny Function Graph"
+author: "Oliver Thistlethwaite"
+date: "February 2, 2017"
+output: html_document
+runtime: shiny
+---
+
+
+
+
+```{r, echo = FALSE, warnings = FALSE, message=FALSE}
+library(dplyr)
+library(ggplot2)
+
+textInput("fun", label = "function", value = "x^2")
+numericInput("points", label = "Number of points", value = 10, step = 1)
+sliderInput("noise", label = "Noise level", min = 0, max = 10, value = 0, animate = TRUE)
+
+```
+
+```{r, echo = FALSE}
+renderPlot({
+ #input$fun
+  
+  f <- function(x){}
+  body(f) <- parse(text = input$fun)
+  
+  ggplot(data.frame(x = c(-10, 10)), aes(x)) + 
+    stat_function(fun = f, colour = "red")
+  
+  
+  
+  })
+```

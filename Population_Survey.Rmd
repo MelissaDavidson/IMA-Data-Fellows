@@ -1,0 +1,184 @@
+---
+title: "Population_Survey"
+output: html_document
+---
+
+```{r}
+# ANALYSIS OF VARIANCE - ANOVA
+require(mosaic)
+library(stats)
+# stats class says it's for comparing means of various groups
+ View(CPS85)
+```
+
+```{r}
+# do means of wage differ by sector of the economy
+
+mean(wage ~ sector, data = CPS85)
+# answer: yes
+```
+
+```{r}
+# estimate in dollars per hour
+# intercent is how much you get paid if you're in reference level of category (clerical for us, 1st alphabetically)
+# so each combines each to clerical works
+# professionals and managers make more than clerical works
+# difference is large according to std err (managers make $1.50 more per hour)
+
+# is sector related?
+# yes
+mod <- 
+  lm(wage ~ sector, data = CPS85)
+
+trials <- 
+  do(500) * rsquared(lm(wage ~ shuffle(sector), data = CPS85))
+
+trials %>% 
+  ggplot(aes(x = rsquared)) +
+  geom_histogram()
+```
+
+```{r}
+
+mod <- 
+  lm(wage ~ sector, data = CPS85)
+
+summary(mod)
+```
+
+```{r}
+anova(mod)
+
+# 7 degrees of freedom
+# 526 is number of data points minus 7 plus 1
+# square length of vector is Sum Sq - sum of square of fitted model values - how much further have to go to reach fitted model
+# mean sq is slope
+# f is mean sq of err divided by mean sq of residiual, 16 sounds big
+# b/c we know slope of junk, can turn F into p-value - F has to be really big in order to have something
+
+# F test tests whole set of models
+
+# Analysis of Variance Table
+# 
+# Response: wage
+#            Df  Sum Sq Mean Sq F value    Pr(>F)    
+# sector      7  2571.6  367.37  16.796 < 2.2e-16 ***
+# Residuals 526 11505.1   21.87                      
+# ---
+# Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+```
+
+```{r}
+# ANOVA in generality
+# logic of ANOVA:
+# how much does each football player add to a team?
+# test by pulling each out and see how team does
+# ANOVA starts with null team, with nobody on it
+# Then you take first squad and see how they do
+# keep adding teams in addition to what's already there
+
+mod <- 
+  lm(wage ~ sector + age + exper + educ + married, data = CPS85)
+
+anova(mod)
+# sumsq - like square score
+# how far did full team get? sum(CPS85$wage - mean(CPS85$wage))^2)
+
+# each term, its slope can be compared to junk slope
+# exper is huge, 45
+# education, meh
+# married, not so much
+
+# Analysis of Variance Table
+# 
+# Response: wage
+#            Df  Sum Sq Mean Sq F value    Pr(>F)    
+# sector      7  2571.6  367.37 18.7971 < 2.2e-16 ***
+# age         1   390.3  390.31 19.9711 9.648e-06 ***
+# exper       1   890.7  890.65 45.5719 3.927e-11 ***
+# educ        1     5.1    5.14  0.2628    0.6084    
+# married     1    17.1   17.13  0.8764    0.3496    
+# Residuals 522 10201.9   19.54                      
+# ---
+# Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+summary(mod)
+# age and experience aren't showing anything
+# are they contributing or not?
+# contradictory results
+# ans: in regression table, each coef is evaluated in context of all other coef
+# but in ANOVA it is a series of models
+# ANOVA - you start with squad then add in age then educ then whatever
+# regression rpt - change order of variables and nothing changes
+# order changes in ANOVA
+
+mod <- 
+  lm(wage ~ educ + sector + age + exper + educ + married, data = CPS85)
+
+anova(mod)
+# now educ is a big deal
+# put married first - it's a big deal
+# first terms grab all the credit
+# ANOVA is a test of whether if you add something, you do better
+
+# add interaction between age and sector
+mod <- 
+  lm(wage ~ married + educ + sector * age + exper + educ + married, data = CPS85)
+
+anova(mod)
+# doesn't do anything, might not be worth adding
+```
+
+```{r}
+# go back to SAT
+m <- 
+  lm(sat ~ expend, data = SAT)
+anova(m)
+# yes, expend is important
+
+m <- 
+  lm(sat ~ expend + frac, data = SAT)
+anova(m)
+# frac adds to it
+
+m <- 
+  lm(sat ~ frac + expend, data = SAT)
+anova(m)
+# doesn't really change b/c frac and expend are aligned
+
+m <- 
+  lm(sat ~ frac * expend, data = SAT)
+anova(m)
+# should we have an interaction term?
+# answer: don't really know, things are marginal
+
+# ANOVA is layers of a model, an onion
+# set of nested model
+# change order and you may change result
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

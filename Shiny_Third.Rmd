@@ -1,0 +1,76 @@
+---
+atitle: "Third_Shiny_App"
+runtime: shiny
+output: html_document
+---
+
+```{r echo = FALSE}
+library(shiny)
+library(ggplot2)
+# library(dplyr)
+```
+
+This R Markdown document is made interactive using Shiny. This is the first Shiny I have created. The point of this document is to figure out how to do some stuff. 
+
+Enter the function you wish to consider.
+
+```{r echo = FALSE}
+# place to enter text
+textInput(inputId = "given_function", label = "Enter function here:")#, value = "x" )
+```
+
+Enter the number of points.
+
+```{r echo = FALSE}
+# number of points
+# default comes up as 100. Can step through or enter number manually.
+
+numericInput("pt_number", label = "Number of points:", value = 10, min = 0, max = 500, step = 1)
+```
+
+Select noise.
+
+```{r echo = FALSE,warning=FALSE}
+# noise
+
+sliderInput("noise_adjust", label = "Noise:",
+              min = 0, max = 100, value = 50, step = 0.2)
+```
+
+Indicate the domain.
+
+```{r echo=FALSE, warning=FALSE}
+# two ways: enter lower bound and upper bounds separate
+# or use a slider
+
+# numericInput("x_axis_min", label = "Min value of x:", value = 0, min = 0, max = 500, step = 1)
+# 
+# numericInput("x_axis_max", label = "Max value of x:", value = 10, min = 0, max = 500, step = 1)
+
+sliderInput(c("x_range1", "x_range2"), label = "X-Range:",
+              min = -1000, max = 1000, value = c(-500,500), step = 1)
+
+# sliderInput("x_range", label = "X-Range:",
+#               min = 0, max = 1000, value = 5, step = 1)
+```
+
+
+
+Plot the results.
+
+
+```{r echo=FALSE}
+
+renderPlot({
+
+  f <- function(x){}
+  body(f) <- parse(text = input$given_function)
+
+  ggplot(data.frame(x_axis = c(input$x_range1, input$x_range2)), aes(x = x_axis)) +
+             stat_function(fun = f, colour = "red")
+
+  })
+
+
+```
+

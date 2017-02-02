@@ -1,0 +1,120 @@
+---
+title: "Trees"
+output: html_document
+---
+
+```{r}
+library(mosaic)
+require(DataComputing)
+library(rpart)
+library(randomForest)
+```
+
+```{r}
+# random forests
+ mod0 <- 
+  rpart(sex ~ age + educ + wage, data = CPS85)
+
+fmodel(mod0)
+# crappy model
+```
+
+```{r}
+# do with random forest
+
+mod1 <- 
+  randomForest(sex ~ age + educ + wage, data = CPS85)
+
+fmodel(mod1)
+# hard to read, not showing probability - so output not tuned
+```
+
+```{r}
+# feel better
+mod1 <- 
+  randomForest(wage ~ age + educ + sex, data = CPS85)
+
+fmodel(mod1)
+```
+
+```{r}
+#
+mod1 <- 
+  randomForest(wage ~ age + educ + sex + married, data = CPS85)
+
+fmodel(mod1)
+```
+
+```{r}
+# how do we use for prediction
+# predict works differently for every type of model
+# how do we figure it out?
+method(predict)
+randomForest:::predict.randomForest
+
+predict(mod1, newdata = list(age = 50, sex = "F", married = "Single", educ = 16))
+# DOES NOT WORK but gives basic idea
+
+evaluate_model(mod1) # from Danny's package
+
+evaluate_model(mod1, age = 50, sex = "F", married = "Single", educ = 16)
+```
+
+```{r}
+#
+
+```
+
+```{r}
+#
+
+```
+
+```{r}
+#
+
+```
+
+```{r}
+#
+
+```
+
+
+```{r}
+#
+
+```
+
+```{r}
+#
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

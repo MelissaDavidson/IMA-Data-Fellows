@@ -1,0 +1,220 @@
+---
+title: "Cars_Honda"
+output: html_document
+---
+
+* Project re asking prices for used Hondas
+* From Week Two Monday
+
+```{r cache = TRUE}
+# read in data and name it cars
+
+Cars = read.csv("http://tiny.cc/mosaic/used-hondas.csv")
+
+# check for reasonable
+head(Cars)
+str(Cars)
+
+# look at just variable names
+names(Cars)
+```
+
+```{r}
+# load libraries
+library(ggplot)
+library(stats)
+library(mosaic)
+```
+
+```{r}
+# For each of the variables, fit the model with the lm() function
+# First is Price vs Age
+mod1 <- 
+  lm(Price ~ Age, data = Cars)
+
+mod1 %>% 
+  ggplot(aes(x = Price, y = Age)) +
+  geom_point()
+```
+
+```{r}
+mod2 <- 
+  lm(Price ~ Mileage, data = Cars)
+```
+
+```{r}
+mod3 <- 
+  lm(Price ~ Age + Mileage, data = Cars)
+```
+
+```{r}
+mod4 <- 
+  lm(Price ~ Age * Mileage, data = Cars)
+```
+
+```{r}
+# extract the model function from each model
+
+f1 <- makeFun(mod1)
+f2 <- makeFun(mod2)
+f3 <- makeFun(mod3)
+f4 <- makeFun(mod4)
+```
+
+```{r}
+# plot f4
+
+plotFun(f4(Age = Age, Mileage = Mileage) ~ Age + Mileage, Age.lim = c(0, 10), Mileage.lim = c(0,6000))
+```
+
+```{r}
+# For each of the models, find the model price for a car that's 7 years old with 80,000 miles
+
+f1(Age = 7, Mileage = 80000, interval = "confidence")
+f2(Age = 7, Mileage = 80000, interval = "confidence")
+f3(Age = 7, Mileage = 80000, interval = "confidence")
+f4(Age = 7, Mileage = 80000, interval = "confidence")
+```
+
+```{r}
+# also consider 
+
+f1(Age = 7, Mileage = 80000, interval = "prediction")
+f2(Age = 7, Mileage = 80000, interval = "prediction")
+f3(Age = 7, Mileage = 80000, interval = "prediction")
+f4(Age = 7, Mileage = 80000, interval = "prediction")
+```
+
+```{r}
+# Quantify the impact of each variable by comparing two cars with different values for that variable
+
+f3(Age = 8, Mileage = 80000) - f3(Age = 7, Mileage = 80000)
+
+# or if you prefer, you can compute the derivative function
+df3_dAge <- 
+  D(f3(Age = Age, Mileage = Mileage) ~ Age)
+df3_dAge(Age = 7, Mileage = 80000)
+```
+
+```{r}
+# Calculate total change for a car that ages from 4 to 5 yrs while mileage increases from 40,000 to 50,000
+
+f1(Age = 5, Mileage = 50000) - f1(Age = 4, Mileage = 40000)
+f2(Age = 5, Mileage = 50000) - f2(Age = 4, Mileage = 40000)
+f3(Age = 5, Mileage = 50000) - f3(Age = 4, Mileage = 40000)
+f4(Age = 5, Mileage = 50000) - f4(Age = 4, Mileage = 40000)
+```
+
+```{r}
+# age and mileage in terms of price can stand in for each other
+# stats way
+
+with(Cars, cor(Age, Mileage))
+# not very useful
+
+moda <- 
+  lm(Mileage ~ Age, data = Cars)
+# making a linear relationg between age and mileage
+# people seem to drive their cars roughly 13305 miles per year
+
+# another way
+fa <- 
+  makeFun(moda)
+plotFun(fa(Age = Age) ~ Age, Age.lim = c(0,10))
+plotPoints(Mileage ~ Age, data = Cars, add = TRUE)
+```
+
+```{r}
+resid(mod1) # residuals w.r.t. Mileage
+mean(resid(moda)) # fitting process guarantees mean resid is 0
+mean(abs(resid(moda)))
+mean(resid((moda)^2)) # square miles
+sd(resid(moda)) # standard way to measure residuals
+fitted(moda) # calc what model thinks mileage should be
+mean(resid(moda)) # on avg, resid is 0
+mean(fitted(moda)) # same as mean(Cars$Mileage) b/c resid is 0
+
+sd(fitted(moda))
+sd(resid(moda))
+sd(Cars$Mileage)
+# no obvious relationship between these three
+
+sd(fitted(moda))^2
+sd(resid(moda))^2
+sd(Cars$Mileage)^2
+# relationships is first two added together = third
+# they are a Pythagorean triple
+
+var(fitted(moda) / var(Cars$Mileage))
+
+lm(formula = Mileage ~ Age, data = Cars)
+# as age goes up, mileage goes up by 13000 per year
+
+rsquared(lm(Price ~ Mileage, data = Cars))
+# Mileage accounts for good part of difference in price
+
+rsquared(lm(Price ~ Age, data = Cars))
+# not as good
+
+rsquared(lm(Price ~ Age + Mileage, data = Cars)) # model 3, better than mod1 or 2
+
+rsquared(lm(Price ~ Age * Mileage, data = Cars)) # model 4
+
+rsquared(lm(Price ~ poly(Age, 4) * poly(Mileage, 4) * Color * Location, data = Cars))
+# and now we're overfitting
+```
+
+```{r}
+Small <- 
+  sample(Cars, size = 10)
+```
+
+```{r}
+mod <- 
+  lm(Price ~ Age + Mileage + Color, data = Small)
+
+model.matrix(mod) # problem, no black
+
+mod <- 
+  lm(Price ~ Age + Mileage + Color - 1, data = Small) #-1 to remove intercept
+
+model.matrix(mod)
+# this is how categorical variables are displayed
+```
+
+```{r}
+mod <- 
+  lm(Price ~ Age + Mileage + Color*Age, data = Small)
+# added interaction term between Age and Color
+# takes every vector associated with Color and every vector with Age (just one in this case) and does cross multiplication
+
+model.matrix(mod)
+```
+
+```{r}
+rsquared(lm(Price ~ rand(10), data = Cars))
+# try rand(xx) with different numbers
+# as you get higher, get better results
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

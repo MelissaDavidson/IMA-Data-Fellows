@@ -1,0 +1,80 @@
+---
+title: "Web Scraping Car Data"
+output: html_document
+---
+
+```{r}
+# Web scraping for car prices
+# go to www.cargurus.com
+# Here is a query for Aston Martin Vanquish near 45561
+#https://www.cargurus.com/Cars/inventorylisting/viewDetailsFilterViewInventoryListing.action?sourceContext=carGurusHomePage_false_0&formSourceTag=104&entitySelectingHelper.selectedEntity=d2223&zip=45516
+#viewDetailsFilter... is a program that takes arguments in name/value pairs with & as the separator
+
+# What if we change distance (on website selector) to nationwide?
+#https://www.cargurus.com/Cars/inventorylisting/viewDetailsFilterViewInventoryListing.action?sourceContext=carGurusHomePage_false_0&formSourceTag=112&newSearchFromOverviewPage=true&inventorySearchWidgetType=AUTO&entitySelectingHelper.selectedEntity=d2223&entitySelectingHelper.selectedEntity2=&zip=45506&distance=50000&searchChanged=true&modelChanged=false&filtersModified=true
+
+# look at source code (html) for the page
+# can find pattern of data we are looking for
+
+# use SelectorGadget to narrow pattern down
+```
+
+```{r}
+#
+
+```
+
+```{r}
+#
+
+```
+
+```{r}
+#
+
+```
+
+```{r}
+#
+
+```
+
+```{r}
+#
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
